@@ -8,57 +8,38 @@ namespace TapeLib
     class Tape
     {
         // === USER INTERACTIVE ===
-        private static SavedMap currentPlayerMap;
-        public static Tape currentTape;
-        public static bool IsRecording = false;
-        public static bool IsReplaying = false;
-        public string recordingName;
-        public float recordingDelay = 1 / 120;
-        public float displayDelay = 1 / 120;
-        public int recordedFrames = 0;
+        public static List<Tape>    tapes = new List<Tape>();
+        public static Tape          currentTape;
+        public static bool          IsRecording = false;
+        public static bool          IsReplaying = false;
+        public string               recordingName;
+        public float                recordingDelay = 1 / 120;
+        public float                displayDelay = 1 / 120;
+        public int                  recordedFrames = 0;
 
         // === RECORD & DISPLAY ===
-        private float localTimer;
-        public KeyFrame currentKeyFrame;
-        public KeyFrame lastRecordedKeyFrame;
-        public KeyFrame currentDisplayKeyFrame;
-        public int displayIndex = 0;
-        public List<KeyFrame> timeLine = new List<KeyFrame>();
+        private float               localTimer;
+        public KeyFrame             currentKeyFrame;
+        public KeyFrame             lastRecordedKeyFrame;
+        public KeyFrame             currentDisplayKeyFrame;
+        public int                  displayIndex = 0;
+        public List<KeyFrame>       timeLine = new List<KeyFrame>();
 
         public Tape(string name)
         {
             recordingName = name;
+            tapes.Add(this);
             currentTape = this;
-        }
-
-        public static void StartReplayMode()
-        {
-            if (Tape.currentTape == null) { return; }
-            IsRecording = false;
-            IsReplaying = false;
-            currentPlayerMap = SaveManager.saveWorldToDirectory($"{NCMS.Core.NCMSModsPath}/RewindBox/rewindbox_temp/", true);
-        }
-
-        public static void ReturnToOriginalMap()
-        {
-            if (Tape.currentTape == null) { return; }
-            IsRecording = false;
-            IsReplaying = false;
-
-            SmoothLoader.prepare();
-            //currentPlayerMap.worldLaws.check(); // ???
-            MapBox.instance.saveManager.loadData(currentPlayerMap);
-            Tape.currentTape.RemoveAllDisplay();
         }
 
         public class KeyFrame
         {
 
             // ==== STORAGE (LEGACY CODE SUPPORT) ====
-            public RecordingActors.CreaturesKeyFrame creatures;
-            public RecordingItems.ItemsKeyFrame items;
-            public RecordingMap.MapKeyFrame map;
-            public RecordingBuildings.BuildingsKeyFrame buildings;
+            public RecordingActors.CreaturesKeyFrame        creatures;
+            public RecordingItems.ItemsKeyFrame             items;
+            public RecordingMap.MapKeyFrame                 map;
+            public RecordingBuildings.BuildingsKeyFrame     buildings;
 
             public void Record()
             {
@@ -100,7 +81,7 @@ namespace TapeLib
 
         public void DisplayKeyFrame()
         {
-            //if (Config.paused) { return; }
+            // DEMO CODE FOR DISPLAYING
             if (!IsReplaying) { return; }
 
             localTimer += Time.deltaTime;
@@ -110,8 +91,6 @@ namespace TapeLib
                 return;
             }
             localTimer -= displayDelay;
-
-            //if(lastDisplayedFrame != null) { lastDisplayedFrame.RemoveDisplay();}
 
             if (displayIndex == timeLine.Count)
             {

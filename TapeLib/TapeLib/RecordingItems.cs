@@ -16,14 +16,16 @@ namespace TapeLib
         public enum ActionType { changeSprite, moveTo }
         public class ItemAction
         {
-            private static Dictionary<ActorBase, Sprite> lastSprites = new Dictionary<ActorBase, Sprite>();
-            private static Dictionary<ActorBase, Vector3> lastPositions = new Dictionary<ActorBase, Vector3>();
-            public static Dictionary<string, GameObject> fakeItems = new Dictionary<string, GameObject>();
+            // === RECORDING DATA ===
+            private static Dictionary<ActorBase, Sprite>    lastSprites = new Dictionary<ActorBase, Sprite>();
+            private static Dictionary<ActorBase, Vector3>   lastPositions = new Dictionary<ActorBase, Vector3>();
+            public static Dictionary<string, GameObject>    fakeItems = new Dictionary<string, GameObject>();
 
-            public ActionType type;
-            public Vector3 vectorData;
-            public Sprite sprite;
-            public string ID;
+            // === ACTION DATA ===
+            public ActionType   type;
+            public Vector3      vectorData;
+            public Sprite       sprite;
+            public string       ID;
 
             public void execute()
             {
@@ -39,8 +41,7 @@ namespace TapeLib
                 }
             }
 
-            /// <param name="position">In case the action type is not moveActor set to Vector3.zero</param>
-            /// <param name="angles">In case the action type is not moveActor set to Vector3.zero</param>
+            /// <param name="vectorData">In case the action type does is not required set to Vector3.zero</param>
             public ItemAction(ActorBase holder, ActionType type, Vector3 vectorData, Sprite sprite = null)
             {
                 this.type = type;

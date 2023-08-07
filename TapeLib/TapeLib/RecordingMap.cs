@@ -17,11 +17,13 @@ namespace TapeLib
 
         public class TileAction
         {
+            // === RECORDING DATA ===
             private static Dictionary<string, string> lastTypes = new Dictionary<string, string>();
 
-            public ActionType type;
-            public string tileType;
-            public string ID;
+            // === ACTION DATA ===
+            public ActionType   type;
+            public string       tileType;
+            public string       ID;
 
             public void execute()
             {

@@ -8,20 +8,26 @@ namespace TapeLib
 {
     class RecordingActors // [LEGACY CODE]
     {
-        // changeSprite is very hacky: but it would be more compatible with further updates and mods.
+        public class CreaturesKeyFrame
+        {
+            public List<ActorAction> actions = new List<ActorAction>();
+        }
+
         public enum ActionType { changeSprite, moveTo, newActor, killActor }
 
         public class ActorAction
         {
-            private static Dictionary<ActorBase, Sprite> lastSprites = new Dictionary<ActorBase, Sprite>();
-            private static Dictionary<ActorBase, Vector3> lastPositions = new Dictionary<ActorBase, Vector3>();
-            public static Dictionary<string, GameObject> fakeActors = new Dictionary<string, GameObject>();
-            public static List<ActorBase> deadActors = new List<ActorBase>();
+            // === RECORDING DATA ===
+            private static Dictionary<ActorBase, Sprite>        lastSprites = new Dictionary<ActorBase, Sprite>();
+            private static Dictionary<ActorBase, Vector3>       lastPositions = new Dictionary<ActorBase, Vector3>();
+            public static Dictionary<string, GameObject>        fakeActors = new Dictionary<string, GameObject>();
+            public static List<ActorBase>                       deadActors = new List<ActorBase>();
 
-            public ActionType type;
-            public Vector3 vectorData;
-            public Sprite sprite;
-            public string ID;
+            // === ACTION DATA ===
+            public ActionType   type;
+            public Vector3      vectorData;
+            public Sprite       sprite;
+            public string       ID;
 
             public void execute()
             {
@@ -43,8 +49,7 @@ namespace TapeLib
                 }
             }
 
-            /// <param name="position">In case the action type is not moveActor set to Vector3.zero</param>
-            /// <param name="angles">In case the action type is not moveActor set to Vector3.zero</param>
+            /// <param name="vectorData">In case the action type does is not required set to Vector3.zero</param>
             public ActorAction(ActorBase actor, ActionType type, Vector3 vectorData, Sprite sprite = null)
             {
                 this.type = type;
@@ -108,15 +113,8 @@ namespace TapeLib
             }
         }
 
-        public class CreaturesKeyFrame
-        {
-            public List<ActorAction> actions = new List<ActorAction>();
-        }
-
         public static void RecordCreatures()
         {
-            //WorldLayer layer = Reflection.GetField(typeof(MapBox), World.world, "worldLayer") as WorldLayer;
-            //layer.setRendererEnabled(true);
             Tape tape = Tape.currentTape;
 
             CreaturesKeyFrame keyframe = new CreaturesKeyFrame();
@@ -136,8 +134,6 @@ namespace TapeLib
                     continue;
                 }
 
-                // Heres a special one!!  you see turns out that Reflection is very expensive when calling every frame,
-                // thats why ive made an assembly (wich is in Assemblies folder) that makes checkSpriteToRender() public.
                 Sprite curSprite = actor.checkSpriteToRender();
 
                 Sprite lastSprite = ActorAction.TryGetLastSprite(actor);

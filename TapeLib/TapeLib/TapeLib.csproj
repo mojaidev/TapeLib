@@ -35,5 +35,26 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="RecordingActors.cs" />
+    <Compile Include="RecordingBuildings.cs" />
+    <Compile Include="RecordingItems.cs" />
+    <Compile Include="RecordingMap.cs" />
+    <Compile Include="Tape.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\Assemblies\Assembly-Csharp\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="NCMS_memload">
+      <HintPath>..\..\Assemblies\NCMS_memload.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\Assemblies\Assembly-Csharp\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\Assemblies\Assembly-Csharp\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

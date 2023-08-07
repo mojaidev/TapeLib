@@ -15,14 +15,16 @@ namespace TapeLib
         public enum ActionType { changeScale, spawnBuilding, changeSprite }
         public class BuildingAction
         {
-            private static Dictionary<Building, Sprite> lastSprites = new Dictionary<Building, Sprite>();
-            private static Dictionary<Building, Vector3> lastScales = new Dictionary<Building, Vector3>();
-            public static Dictionary<string, GameObject> fakeBuildings = new Dictionary<string, GameObject>();
+            // === RECORDING DATA ===
+            private static Dictionary<Building, Sprite>     lastSprites = new Dictionary<Building, Sprite>();
+            private static Dictionary<Building, Vector3>    lastScales = new Dictionary<Building, Vector3>();
+            public static Dictionary<string, GameObject>    fakeBuildings = new Dictionary<string, GameObject>();
 
-            public ActionType type;
-            public Sprite sprite;
-            public Vector3 vector3Data;
-            public string ID;
+            // === ACTION DATA ===
+            public ActionType   type;
+            public Sprite       sprite;
+            public Vector3      vectorData;
+            public string       ID;
 
             public void execute()
             {
@@ -31,12 +33,12 @@ namespace TapeLib
                     case ActionType.changeScale:
                         GameObject building = GetFakeBuildingById(ID);
                         if (building == null) { return; }
-                        building.transform.localScale = vector3Data;
+                        building.transform.localScale = vectorData;
                         return;
                     case ActionType.spawnBuilding:
                         building = GetFakeBuildingById(ID);
                         if (building == null) { return; }
-                        building.transform.position = vector3Data;
+                        building.transform.position = vectorData;
                         return;
                     case ActionType.changeSprite:
                         building = GetFakeBuildingById(ID);
@@ -46,10 +48,11 @@ namespace TapeLib
                 }
             }
 
-            public BuildingAction(Building building, ActionType type, Vector3 vector3Data, Sprite sprite = null)
+            /// <param name="vectorData">In case the action type does is not required set to Vector3.zero</param>
+            public BuildingAction(Building building, ActionType type, Vector3 vectorData, Sprite sprite = null)
             {
                 this.type = type;
-                this.vector3Data = vector3Data;
+                this.vectorData = vectorData;
                 this.sprite = sprite;
 
                 ID = building.data.id;
@@ -154,6 +157,7 @@ namespace TapeLib
 
         private static Sprite GetSpriteWithoutRendering(Building building)
         {
+            // CODE STOLEN FROM ASSEMBLY
             bool flag = true;
             bool flag2 = building.isRuin();
             if (flag2)
@@ -222,7 +226,6 @@ namespace TapeLib
             {
                 sprite = AnimationHelper.getSpriteFromList(building.GetHashCode(), array, building.asset.animation_speed);
             }
-
             return UnitSpriteConstructor.getRecoloredSpriteBuilding(sprite, building.kingdom.getColor());
         }
     }
